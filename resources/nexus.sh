@@ -162,8 +162,10 @@ else
     sed -i "/LdapAuthenticatingRealm/d" ${NEXUS_HOME}/conf/security-configuration.xml
 fi
  
-# chown the nexus home directory
-chown -R nexus:nexus ${NEXUS_HOME}
+# chown the nexus home directory if running for the first time
+if [[ $(ls -ld ${NEXUS_HOME}storage | awk '{print $3}') != nexus ]]; then
+  chown -R nexus:nexus ${NEXUS_HOME}
+fi
  
 # start nexus as the nexus user
 su -c "java \
